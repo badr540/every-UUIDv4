@@ -1,0 +1,75 @@
+@import "tailwindcss";
+
+@theme{
+  --color-base-100: oklch(97% 0.01 270);
+  --color-base-200: oklch(94% 0.01 270);
+  --color-base-content: oklch(35% 0.02 280);
+  --color-surface: oklch(90% 0.01 270);
+  --color-surface-content: oklch(20% 0.01 270);
+  --color-accent: oklch(60% 0.15 280);
+  --color-accent-active: oklch(50% 0.15 280);
+  --color-accent-content: oklch(98% 0.005 270);
+  --color-success: oklch(75% 0.14 150);
+  --color-success-content: oklch(30% 0.05 150);
+  --color-warning: oklch(78% 0.16 80);
+  --color-warning-content: oklch(30% 0.08 80);
+  --color-error: oklch(68% 0.18 20);
+  --color-error-content: oklch(98% 0.005 20);
+}
+
+@layer base {
+  [data-theme="dark"] {
+    --color-base-100: oklch(15% 0.01 270);
+    --color-base-200: oklch(20% 0.01 270);
+    --color-base-content: oklch(90% 0.01 270);
+    --color-accent: oklch(65% 0.22 25);
+    --color-accent-active: oklch(55% 0.24 25);
+    --color-accent-content: oklch(98% 0.01 270);
+    --color-surface: oklch(23% 0.01 270);
+    --color-surface-content: oklch(88% 0.01 270);
+    --color-success: oklch(70% 0.14 150);
+    --color-success-content: oklch(25% 0.05 150);
+    --color-warning: oklch(75% 0.16 80);
+    --color-warning-content: oklch(30% 0.06 80);
+    --color-error: oklch(60% 0.20 30);
+    --color-error-content: oklch(95% 0.01 270);
+  }
+
+
+  [data-theme="light"] {
+    --color-base-100: oklch(99% 0.005 270);
+    --color-base-200: oklch(96% 0.005 270);
+    --color-base-content: oklch(20% 0.01 270); 
+    --color-surface: oklch(93% 0.005 270); 
+    --color-surface-content: oklch(25% 0.01 270);
+    --color-accent: oklch(65% 0.22 25);
+    --color-accent-active: oklch(55% 0.24 25);
+    --color-accent-content: oklch(98% 0.01 270);
+    --color-success: oklch(65% 0.16 150);   
+    --color-success-content: oklch(20% 0.05 150);
+    --color-warning: oklch(75% 0.18 80);    
+    --color-warning-content: oklch(25% 0.08 80);
+    --color-error: oklch(55% 0.22 30);
+    --color-error-content: oklch(99% 0.005 270);
+  }
+
+
+}
+
+@font-face {
+  font-family: "Monaspace Neon";
+  src: url("https://github.com/githubnext/monaspace/raw/main/fonts/webfonts/MonaspaceNeon-Regular.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  @apply font-sans antialiased subpixel-antialiased;
+  font-family: "Monaspace Neon", monospace;
+
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  
+  color-scheme: light dark;
+}
