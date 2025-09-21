@@ -5,7 +5,7 @@ type FavoritesContextType = [
     setShowFavorites: (val:boolean) => void
 ]
 
-const FavoritesContext = createContext<FavoritesContextType>([false, (val) =>{}]);
+const FavoritesContext = createContext<FavoritesContextType>([false, () =>{}]);
 
 export const FavoritesProvider = ({ children }: {children: React.ReactNode}) => {
     const [showFavorites, setShowFavorites] = useState(false);

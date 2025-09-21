@@ -2,7 +2,7 @@ import React from "react";
 import Button from "./Button";
 import Clipboard from "./Icons/Clipboard";
 import Star from "./Icons/Star";
-import Message from "./Message";
+
 type ListItemProps = {
     style?: React.CSSProperties | undefined,
     index: bigint,

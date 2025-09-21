@@ -5,7 +5,7 @@ type ShuffleContextType = [
     setShuffle: (val:boolean) => void
 ]
 
-const ShuffleContext = createContext<ShuffleContextType>([false, (val) =>{}]);
+const ShuffleContext = createContext<ShuffleContextType>([false, () =>{}]);
 
 export const ShuffleProvider = ({ children }: {children: React.ReactNode}) => {
     const [isShuffled, setShuffle] = useState(false);

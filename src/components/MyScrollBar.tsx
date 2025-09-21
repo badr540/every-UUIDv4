@@ -1,6 +1,4 @@
-import { useRef } from 'react';
 import { Scrollbar } from 'react-scrollbars-custom';
-import type { ComponentProps } from "react";
 
 type MyScrollBarType = {
   setScrollPrecentage: (vals :number) => void | undefined, 

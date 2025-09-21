@@ -21,8 +21,8 @@ function UUIDList(){
 
     const [itemHeight, setItemHeight] = useState(0)
 
-    const [showFavorites, setShowFavorites] = useContext(FavoritesContext)
-    const [isShuffled, setShuffle] = useContext(ShuffleContext)
+    const [showFavorites] = useContext(FavoritesContext)
+    const [isShuffled] = useContext(ShuffleContext)
     const ref = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
