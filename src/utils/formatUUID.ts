@@ -1,9 +1,6 @@
 
 function formatUUID(index: bigint): string {
-    const FREE_BITS = 122n;
-    //if (index >= (1n << FREE_BITS)) throw new Error(`Index too large ${index.toString(16)}`);
-
-    let binary: string = index.toString(2).padStart(Number(FREE_BITS), '0');
+    let binary: string = index.toString(2).padStart(Number(122), '0');
 
     let uuidBits: string = '';
     uuidBits += binary.slice(0, 48);

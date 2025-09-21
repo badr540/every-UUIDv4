@@ -1,4 +1,6 @@
 import {useEffect, useState} from 'react'
+import Moon from './Icons/Moon'
+import Sun from './Icons/Sun'
 import Button from './Button';
 const themes = ["light", "dark"]; 
 
@@ -27,6 +29,6 @@ export default function ThemeSwitcher() {
   return (
     <Button 
     onClick={() => setTheme( (currentTheme == themes[0])? themes[1] : themes[0] )}>
-    {(currentTheme == themes[0])? themes[1] : themes[0]}
+    {(currentTheme == 'light')? <Moon/> : <Sun/>}
   </Button>);
 }

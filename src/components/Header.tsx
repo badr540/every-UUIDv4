@@ -1,11 +1,18 @@
-import {useContext} from 'react'
+import {useContext, useEffect} from 'react'
 import ThemeSwitcher from "./ThemeSwitcher"
 import Button from "./Button"
 import FavoritesContext from'../contexts/FavoritesContext';
 import ShuffleContext from '../contexts/ShuffleContext';
+import Star from  './Icons/Star'
 function Header(){
     const [showFavorites, setShowFavorites] = useContext(FavoritesContext)
     const [isShuffled, setShuffle] = useContext(ShuffleContext)
+
+    useEffect(() => {
+        if(showFavorites){
+            setShuffle(false)
+        }
+    }, [showFavorites, isShuffled])
 
     return(
         <header
@@ -16,8 +23,8 @@ function Header(){
                 Every UUIDv4
             </h1>
             <div className="flex justify-around w-[25%]">
-            <Button onClick={() => setShowFavorites(!showFavorites)}>Favorites</Button>
-            <Button onClick={()=> setShuffle(!isShuffled)}>{(isShuffled)? "Unshuffle": "Shuffle"}</Button>
+            <Button onClick={()=> setShuffle(!isShuffled)} isActive={isShuffled}>{"Shuffle"}</Button>
+            <Button onClick={() => setShowFavorites(!showFavorites)} isActive={showFavorites}><Star/></Button>
             <ThemeSwitcher/>
             </div>
         </header>

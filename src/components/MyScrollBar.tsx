@@ -1,17 +1,31 @@
+import { useRef } from 'react';
 import { Scrollbar } from 'react-scrollbars-custom';
+import type { ComponentProps } from "react";
 
 type MyScrollBarType = {
-  onScrollChange: (vals :number) => void | undefined, 
+  setScrollPrecentage: (vals :number) => void | undefined, 
   style?: React.CSSProperties | undefined,
   children?: React.ReactNode | undefined
 }
 
-function MyScrollBar({onScrollChange, style, children}: MyScrollBarType){
+type ScrollState = { scrollTop: number, scrollHeight: number, clientHeight: number }
+
+function MyScrollBar({setScrollPrecentage, style, children}: MyScrollBarType){
+
+
+  function handleScroll({ scrollTop, scrollHeight, clientHeight }: ScrollState){
+    if (scrollTop + clientHeight >= scrollHeight - 1) {
+      setScrollPrecentage(1)
+    }
+    else{
+      setScrollPrecentage(scrollTop/(scrollHeight - clientHeight))
+    }
+  };
 
   return (
   <Scrollbar
     style={style}
-    onUpdate={(value) => onScrollChange(value.scrollTop/value.scrollHeight)}
+    onUpdate={handleScroll}
     trackYProps={{
       renderer: ({ elementRef, style, ...props }) => (
         <div
