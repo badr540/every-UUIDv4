@@ -8,5 +8,5 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  base: "/every-UUIDv4"
+  base: "/every-UUIDv4",
 })

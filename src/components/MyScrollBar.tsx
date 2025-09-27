@@ -1,29 +1,38 @@
+import { useEffect, useState } from 'react';
 import { Scrollbar } from 'react-scrollbars-custom';
 
+type ScrollState = { scrollTop: number, scrollHeight: number, clientHeight: number }
+
 type MyScrollBarType = {
-  setScrollPrecentage: (vals :number) => void | undefined, 
+  setScrollState: (vals :ScrollState) => void | undefined, 
+  scrollTop: number,
   style?: React.CSSProperties | undefined,
   children?: React.ReactNode | undefined
 }
 
-type ScrollState = { scrollTop: number, scrollHeight: number, clientHeight: number }
-
-function MyScrollBar({setScrollPrecentage, style, children}: MyScrollBarType){
 
 
-  function handleScroll({ scrollTop, scrollHeight, clientHeight }: ScrollState){
-    if (scrollTop + clientHeight >= scrollHeight - 1) {
-      setScrollPrecentage(1)
+function MyScrollBar({setScrollState, scrollTop, style, children}: MyScrollBarType){
+  const [isThumbScroll, setThumbScroll] = useState(true) //is the scroll triggered by a thumb move
+
+  useEffect(()=>{
+    setThumbScroll(false)
+  }, [scrollTop])
+  
+  function handleUpdate(state: ScrollState){
+    if(isThumbScroll){
+      setScrollState(state)
     }
     else{
-      setScrollPrecentage(scrollTop/(scrollHeight - clientHeight))
+      setThumbScroll(true)
     }
-  };
-
+  }
+  
   return (
   <Scrollbar
     style={style}
-    onUpdate={handleScroll}
+    scrollTop={scrollTop}
+    onUpdate={handleUpdate}
     trackYProps={{
       renderer: ({ elementRef, style, ...props }) => (
         <div
