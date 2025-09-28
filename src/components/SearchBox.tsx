@@ -1,4 +1,4 @@
-import { useEffect, useContext } from "react";
+import { useEffect, useContext, useRef } from "react";
 import SearchContext from "../contexts/SearchContext";
 import Button from "./Button";
 import ArrowDown from "./Icons/ArrowDown";
@@ -10,6 +10,7 @@ import { formatBigNumber, isBigNumber, modCycle } from "../utils/MathUtils";
 
 function SearchBox() {
     const [searchTerm, setSearchTerm, searchIndex, setSearchIndex ,showSearchBox, setShowSearchBox] =  useContext(SearchContext)
+    const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         const handleKeyDown = (e: KeyboardEvent) => {
@@ -26,6 +27,12 @@ function SearchBox() {
     }, []);
 
     useEffect(() => {
+        if(showSearchBox){
+            inputRef.current?.focus();
+        }
+    }, [showSearchBox]);
+
+    useEffect(() => {
         setSearchIndex(0n);
     }, [searchTerm])
 
@@ -34,14 +41,14 @@ function SearchBox() {
     if(matches > 0n){
         if(searchIndex < 0n){
             displayIndex = (isBigNumber(matches))? `(${formatBigNumber(matches)}) - ${searchIndex.toString().replace('-', '')}` 
-            : (modCycle(Number(searchIndex),Number(matches)) + 1).toString() 
+            : (modCycle(searchIndex,matches) + 1n).toString() 
         }
         else{
-            displayIndex = (modCycle(Number(searchIndex),Number(matches)) + 1).toString() 
+            displayIndex = (modCycle(searchIndex, matches) + 1n).toString() 
         }
     }
     
-     
+    console.log(displayIndex)
     
     if (!showSearchBox) return null;
 
@@ -57,6 +64,7 @@ function SearchBox() {
         
         >
         <input 
+            ref={inputRef}
             type="text" 
             className="border-1 border-surface-content bg-base-100 p-1 w-80 text-sm" 
             placeholder="find" 
@@ -66,13 +74,14 @@ function SearchBox() {
         </input>
         <div className="flex justify-between p-1">
             {(matches == 0n) &&<span className="flex items-center text-red-500">No results</span>}
-            {(matches > 0) && 
-            <>
-                <span className="flex items-center">{displayIndex} of {formatBigNumber(matches)}</span>
-                <Button onClick={() => setSearchIndex(searchIndex-1n)}><ArrowUp/></Button>
-                <Button onClick={() => setSearchIndex(searchIndex+1n)}><ArrowDown/></Button>
-            </>}
-            <Button onClick={() => setShowSearchBox(false)}><Close/></Button>
+            {(matches > 0) && <span className="flex items-center">{displayIndex} of {formatBigNumber(matches)}</span>}
+            <div className="flex justify-between">
+                {matches > 0 && <>
+                    <Button onClick={() => setSearchIndex(searchIndex-1n)}><ArrowUp/></Button>
+                    <Button onClick={() => setSearchIndex(searchIndex+1n)}><ArrowDown/></Button>
+                </>}
+                <Button onClick={() => setShowSearchBox(false)}><Close/></Button>
+            </div>
         </div>
       </div>
 

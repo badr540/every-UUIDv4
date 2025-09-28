@@ -33,7 +33,6 @@ function findMatch(term:string, searchTerm: string, ignore:string): [number, num
 
         if(currMatch == searchTerm.length){
             const matchLength = currMatch+ignored
-            console.log(matchLength)
             return [i-matchLength+1, i]
         }
     }
@@ -47,7 +46,6 @@ function ListItem({style, index, UUID, onFav, onUnfav, isFav, onCopy}: ListItemP
     let [matchS, matchE] = findMatch(UUID, searchTerm, '-')
     
     if(matchS != -1){
-        console.log(UUID[matchS], UUID[matchE])
         UUIDNode =(
         <div className="px-2 whitespace-nowrap">
         {UUID.slice(0, matchS)}
