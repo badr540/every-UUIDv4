@@ -1,14 +1,16 @@
 import { useEffect, useContext, useRef } from "react";
 import SearchContext from "../contexts/SearchContext";
+import FavoritesContext from "../contexts/FavoritesContext";
 import Button from "./Button";
 import ArrowDown from "./Icons/ArrowDown";
 import ArrowUp from "./Icons/ArrowUp";
 import Close from "./Icons/Close";
 import { findNumOfMatches } from "../utils/UUIDIndexing";
-import { formatBigNumber, isBigNumber, modCycle } from "../utils/MathUtils";
+import { formatBigNumber, isBigNumber, modCycle } from "../utils/mathUtils";
 
 
 function SearchBox() {
+
     const [searchTerm, setSearchTerm, searchIndex, setSearchIndex ,showSearchBox, setShowSearchBox] =  useContext(SearchContext)
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -29,6 +31,10 @@ function SearchBox() {
     useEffect(() => {
         if(showSearchBox){
             inputRef.current?.focus();
+        }
+        else{
+            setSearchTerm('')
+            setSearchIndex(0n)
         }
     }, [showSearchBox]);
 

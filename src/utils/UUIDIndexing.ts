@@ -1,4 +1,4 @@
-import { isValidHex, hexToBinary } from "./MathUtils";
+import { isValidHex, hexToBinary } from "./mathUtils";
 
 export function getUUID(index: bigint): string {
     let binary: string = index.toString(2).padStart(Number(122), '0');

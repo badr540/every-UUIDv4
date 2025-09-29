@@ -4,6 +4,8 @@ import Button from "./Button";
 import Clipboard from "./Icons/Clipboard";
 import Star from "./Icons/Star";
 import SearchContext from "../contexts/SearchContext";
+import findMatchingSubstrings from "../utils/findMatchingSubstrings";
+import type {Range} from "../utils/findMatchingSubstrings";
 
 type ListItemProps = {
     style?: CSSProperties | undefined,
@@ -12,48 +14,37 @@ type ListItemProps = {
     onFav: () => void ,
     onUnfav: () => void,
     isFav: boolean,
-    onCopy: () => void
+    onCopy: () => void,
+    isInFocus: boolean,
 }
 
-function findMatch(term:string, searchTerm: string, ignore:string): [number, number]{
-    if(searchTerm == '') return [-1,-1] 
-    let currMatch = 0
-    let ignored = 0
-    for(let i = 0; i < term.length; i++){
-        if(term[i] == searchTerm[currMatch]){
-            currMatch++
-        }
-        else if(term[i] == ignore){
-            ignored++
-        }
-        else{
-            currMatch = 0
-            ignored = 0
-        }
-
-        if(currMatch == searchTerm.length){
-            const matchLength = currMatch+ignored
-            return [i-matchLength+1, i]
-        }
-    }
-
-    return [-1,-1]
-}
-
-function ListItem({style, index, UUID, onFav, onUnfav, isFav, onCopy}: ListItemProps){
-    const [searchTerm] = useContext(SearchContext)
-    let UUIDNode = (<div className="px-2 whitespace-nowrap">{UUID}</div>)
-    let [matchS, matchE] = findMatch(UUID, searchTerm, '-')
+function markMatches(s:string, matches: Range[], isInFocus:boolean): React.ReactNode[] {
+    if(matches.length  == 0) return [<>{s}</>]
+    let marked: React.ReactNode[] = []
+    let prev: Range = {start:0, end:0}
     
-    if(matchS != -1){
-        UUIDNode =(
-        <div className="px-2 whitespace-nowrap">
-        {UUID.slice(0, matchS)}
-        <mark>{UUID.slice(matchS, matchE+1)}</mark>
-        {UUID.slice(matchE+1)}
-        </div>
-        )
+    for(let range of matches){
+        if(prev.end != range.start){
+            marked.push(<span>{s.slice(prev.end, range.start)}</span>)
+        }
+        marked.push(<mark className={isInFocus? "bg-orange-400": ""}>{s.slice(range.start, range.end)}</mark>)
+        prev = range
     }
+
+    if(prev.end != s.length){
+        marked.push(<span>{s.slice(prev.end)}</span>)
+    }
+
+    return marked
+    
+}
+
+function ListItem({style, index, UUID, onFav, onUnfav, isFav, onCopy, isInFocus}: ListItemProps){
+    const [searchTerm] = useContext(SearchContext)
+    
+    let matches: Range[] = findMatchingSubstrings(UUID, searchTerm, new Set(['-']))
+
+    let UUIDNode = (<div className="px-2 whitespace-nowrap">{markMatches(UUID, matches, isInFocus)}</div>)
 
     return (
     <li style={style}

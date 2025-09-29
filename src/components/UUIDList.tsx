@@ -124,16 +124,17 @@ function UUIDList(){
 
     const listElements: React.ReactNode[] = displayList
     .map<[bigint, bigint]>(number => (isShuffled && !showFavorites)? [number, permute(number)]: [number, number])
-    .map(([index, UUID], listIndex) => (
+    .map(([index, currUUIDIndex], listIndex) => (
         <ListItem 
             key={listIndex} 
             style={{height:itemHeight}} 
             index={index} 
-            UUID={getUUID(UUID)} 
-            onFav={() => addToFavorites(UUID)}
-            onUnfav={() => removeFromFavorites(UUID)}
-            isFav={favoritesList.has(UUID.toString())}
-            onCopy={() => handleCopy(getUUID(UUID))}
+            UUID={getUUID(currUUIDIndex)} 
+            onFav={() => addToFavorites(currUUIDIndex)}
+            onUnfav={() => removeFromFavorites(currUUIDIndex)}
+            isFav={favoritesList.has(currUUIDIndex.toString())}
+            onCopy={() => handleCopy(getUUID(currUUIDIndex))}
+            isInFocus={UUIDIndex == currUUIDIndex}
         />)); 
 
     return (
