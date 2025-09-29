@@ -1,4 +1,4 @@
-import { isValidHex, hexToBinary } from "./mathUtils";
+import { isValidHex, hexToBinary, modCycle } from "./mathUtils";
 
 export function getUUID(index: bigint): string {
     let binary: string = index.toString(2).padStart(Number(122), '0');
@@ -54,7 +54,7 @@ export function searchUUIDIndex(searchTerm: string, searchIndex: bigint){
         return -1n
     }
     
-    searchIndex = ((searchIndex % matches) + matches) % matches;
+    searchIndex = modCycle(searchIndex, matches)
     let UUID = findMatch(searchTerm, searchIndex)
     return getUUIDIndex(UUID)
 }

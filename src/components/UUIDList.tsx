@@ -2,13 +2,13 @@ import {useState, useEffect, useContext, useRef} from "react";
 import ListItem from "./ListItem";
 import MyScrollBar from "./MyScrollBar";
 import Big from 'big.js';
-import {getUUID, searchUUIDIndex} from "../utils/UUIDIndexing";
+import {getUUID, searchUUIDIndex} from "../utils/UUIDIndex";
 import {permute, invert} from '../utils/shuffle'
 import FavoritesContext from'../contexts/FavoritesContext';
 import ShuffleContext from "../contexts/ShuffleContext";
 import SearchContext from "../contexts/SearchContext";
 import Message from "./Message";
-
+import { searchUUIDIndexInFavorites } from "../utils/favoritesIndex";
 type ScrollState = { scrollTop: number, scrollHeight: number, clientHeight: number }
 
 function UUIDList(){
@@ -52,14 +52,22 @@ function UUIDList(){
     },[]);
 
     useEffect(() => {
-        const maxIndex: bigint = (1n << 122n) - BigInt(itemsPerPage)
-        let index: bigint = searchUUIDIndex(searchTerm, searchIndex)
-        index = (isShuffled)? invert(index) : index
-        if(index == -1n) return;
-
-        handleSetUUIDIndex(index)
-        const scrollTop = (scrollState.scrollHeight - scrollState.clientHeight) * Big(index.toString()).div(maxIndex.toString()).toNumber()
-        setScrollState(state => ({...state, scrollTop}))
+        if(showFavorites){
+            let index: bigint = searchUUIDIndexInFavorites(searchTerm, searchIndex)
+            if(index == -1n) return;
+            console.log(index)
+            setUUIDIndex(index)
+        }
+        else{
+            const maxIndex: bigint = (1n << 122n) - BigInt(itemsPerPage)
+            let index: bigint = searchUUIDIndex(searchTerm, searchIndex)
+            index = (isShuffled)? invert(index) : index
+            if(index == -1n) return;
+            
+            handleSetUUIDIndex(index)
+            const scrollTop = (scrollState.scrollHeight - scrollState.clientHeight) * Big(index.toString()).div(maxIndex.toString()).toNumber()
+            setScrollState(state => ({...state, scrollTop}))
+        }
     }, [searchTerm, searchIndex])
 
     function handleSetScrollState({scrollTop, scrollHeight, clientHeight}:ScrollState){

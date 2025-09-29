@@ -8,7 +8,7 @@ export default function findMatchingSubstrings(term:string, searchTerm: string, 
         if(term[i] == searchTerm[currMatch]){
             currMatch++
         }
-        else if(ignoreList.has(term[i])){
+        else if(ignoreList.has(term[i]) && currMatch > 1){
             ignored++
         }
         else{

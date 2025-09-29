@@ -32,11 +32,14 @@ export function isValidHex(hex: string): boolean{
 }
 
 export function modCycle<T extends number | bigint>(n: T, m: T): T {
+  
   if (typeof n === "bigint" && typeof m === "bigint") {
+    if(m == 0n) return 0n as T
     return ((n % m) + m) % m as T
   }
 
   if (typeof n === "number" && typeof m === "number") {
+    if(m == 0) return 0 as T
     return ((n % m) + m) % m as T
   }
 

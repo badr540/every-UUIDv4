@@ -5,13 +5,15 @@ import Button from "./Button";
 import ArrowDown from "./Icons/ArrowDown";
 import ArrowUp from "./Icons/ArrowUp";
 import Close from "./Icons/Close";
-import { findNumOfMatches } from "../utils/UUIDIndexing";
+import { findNumOfMatches } from "../utils/UUIDIndex";
+import { findNumOfMatchesInFavorites } from "../utils/favoritesIndex";
 import { formatBigNumber, isBigNumber, modCycle } from "../utils/mathUtils";
 
 
-function SearchBox() {
 
-    const [searchTerm, setSearchTerm, searchIndex, setSearchIndex ,showSearchBox, setShowSearchBox] =  useContext(SearchContext)
+function SearchBox() {
+    const [showFavorites] = useContext(FavoritesContext)
+    const [searchTerm, setSearchTerm, searchIndex, setSearchIndex, showSearchBox, setShowSearchBox] =  useContext(SearchContext)
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
@@ -42,7 +44,8 @@ function SearchBox() {
         setSearchIndex(0n);
     }, [searchTerm])
 
-    const matches = findNumOfMatches(searchTerm)
+    const matches = (showFavorites)? findNumOfMatchesInFavorites(searchTerm) : findNumOfMatches(searchTerm)
+    console.log(matches)
     let displayIndex: string = '';
     if(matches > 0n){
         if(searchIndex < 0n){
@@ -53,9 +56,7 @@ function SearchBox() {
             displayIndex = (modCycle(searchIndex, matches) + 1n).toString() 
         }
     }
-    
-    console.log(displayIndex)
-    
+
     if (!showSearchBox) return null;
 
     return (
