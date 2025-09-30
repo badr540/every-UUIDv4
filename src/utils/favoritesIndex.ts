@@ -6,13 +6,16 @@ export function searchUUIDIndexInFavorites(searchTerm: string, searchIndex: bigi
     let matches = findNumOfMatchesInFavorites(searchTerm)
     searchIndex = modCycle(searchIndex, matches)
     let matchIndex = -1
-    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const stored = JSON.parse(localStorage.getItem("favorites") || "[]") as string[]
+    const favorites = stored.map(s => BigInt(s))
+
     for(let favIndex of favorites){
-        if(findMatchingSubstrings(getUUID(favIndex), searchTerm, new Set(['-'])).length){
+        if(findMatchingSubstrings(getUUID(favIndex), searchTerm, new Set(['-'])).length > 0){
             matchIndex++
         }
 
         if(matchIndex == Number(searchIndex)){
+            console.log(favIndex)
             return favIndex
         }
     }
@@ -22,9 +25,10 @@ export function searchUUIDIndexInFavorites(searchTerm: string, searchIndex: bigi
 
 export function findNumOfMatchesInFavorites(searchTerm: string): bigint{
     let matches = 0n
-    const favorites = JSON.parse(localStorage.getItem("favorites") || "[]");
+    const stored = JSON.parse(localStorage.getItem("favorites") || "[]") as string[];
+    const favorites = stored.map(s => BigInt(s))
     for(let favIndex of favorites){
-        if(findMatchingSubstrings(getUUID(BigInt(favIndex)), searchTerm, new Set(['-'])).length){
+        if(findMatchingSubstrings(getUUID(favIndex), searchTerm, new Set(['-'])).length > 0){
             matches++
         }
     }
